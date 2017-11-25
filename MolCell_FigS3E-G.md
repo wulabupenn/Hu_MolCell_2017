@@ -70,7 +70,7 @@ Ser.comp <- RunCCA(object = Mm, object2 = Nm, genes.use = hvg.union)
 DimHeatmap(object = Ser.comp, reduction.type = "cca", cells.use = 500, dim.use = 1:9, do.balanced = TRUE)
 ```
 
-![plot of chunk Select 1:15 PCs](figure/Select 1:15 PCs-1.svg)
+![plot of chunk Select 1:15 PCs](figure/Select 1:15 PCs-1.svg?sanitize=true)
 
 ```r
 DimHeatmap(object = Ser.comp, reduction.type = "cca", cells.use = 500, dim.use = 10:18, do.balanced = TRUE)
