@@ -945,8 +945,7 @@ ggplot(res.comp3,aes(tmp2,Var2)) + geom_point(aes(size=percent,color=percent)) +
 
 ```r
 d <- readRDS("data/fig1b.rds")
-# the first 2,500 column are cell while the remaining 2,500 column are
-# nuclei
+# the first 2,500 column are cell while the remaining 3,000 column are nuclei
 cell.info <- data.frame(cell = colnames(d)[-1], ID = c(rep("cell-3T3", 2500), 
     rep("nuclei-3T3", 3000)))
 
