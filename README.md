@@ -15,7 +15,7 @@ Source code of the manuscript **Dissecting cell-type composition and activity-de
 * MolCell_Fig4.md: source code for generating Figures 4B, 4C and S4
 * MolCell_FigS3E-G.md: source code for generating Figures S3E-G
 
-*data* folder contains the raw UMI count and pre-processed data, which were used as input in the above markdown files. The *data* folder can be downloaded from [link](https://www.dropbox.com/sh/3cn2rcvf3qacyyr/AABv7ZAFvJlrFQbXty1sq6CYa?dl=0)
+*data* folder contains the raw UMI count and pre-processed data, which were used as input in the above markdown files. The *data* folder can be downloaded from [link](https://drive.google.com/open?id=1g7g_eoXX3oA6i248Tdx53xGqz2ZF1Ga6)
 
 # Contact
 * Peng Hu
