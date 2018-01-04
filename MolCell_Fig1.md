@@ -71,7 +71,23 @@ dat.info <- readRDS("data/nuclei_info.rds")
 
 ### 1.1.2 Setup the Initial Seurat object (20858 nuclei)
 
+```r
+library("Seurat")
+setupSer <- function(tmp1,i,min.genes=800) {
+  ctx  <- new("seurat", raw.data = tmp1)
+  ctx <- Setup(ctx, min.genes = min.genes, min.cells = 10,project = i)
+}
 
+scNuc <- setupSer(tmp1,"scNucDrop-seq")
+
+# Fliter the dataset by mito-percentage and nGene (nGene<6000, percent.mito<0.1)
+mito.genes <- grep("^MT-", rownames(scNuc@data), value = T, ignore.case = T)
+percent.mito <- colSums(as.matrix(expm1(scNuc@data[mito.genes, ]))) / colSums(as.matrix(expm1(scNuc@data)))
+scNuc <- AddMetaData(scNuc, percent.mito, "percent.mito")
+scNuc <- SubsetData(scNuc, subset.name = "nGene", accept.high = 6000)
+scNuc <- SubsetData(scNuc, subset.name = "percent.mito", accept.high = 0.1)
+scNuc
+```
 
 ### 1.1.3. Add the animal identity information 
 
