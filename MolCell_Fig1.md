@@ -687,6 +687,55 @@ colSums(hm.matrix5)
 
 ## 9.2 load the DroNc-seq data  (Habib et al., 2017)
 
+```r
+nm <- read.table("data/DroNc-seq_Mouse_Processed_GTEx_Data.DGE.log-UMI-Counts.txt",header=T,sep="\t")
+head(nm)
+nm[1:5,1:5]
+colSums(nm[2:5])
+nm.class <- read.table("data/DroNc-seq_Mouse_Meta_Data_with_cluster.txt",header=T,sep="\t")
+
+nm.class$NAME <- gsub("0-", "X0.", nm.class$NAME) # replace the symbol "-" since cannot be recongized by R
+table(nm.class$Cluster)
+
+# take out the cells from cortex
+c1 <- unique(as.character(grep("^exPFC",nm.class$Cluster,perl=T,value=T)))
+c2 <- unique(as.character(grep("^GABA",nm.class$Cluster,perl=T,value=T)))
+c3 <- unique(as.character(grep("^ASC",nm.class$Cluster,perl=T,value=T)))
+c4 <- unique(as.character(grep("^OPC",nm.class$Cluster,perl=T,value=T)))
+c5 <- unique(as.character(grep("^ODC",nm.class$Cluster,perl=T,value=T)))
+c6 <- unique(as.character(grep("^MG",nm.class$Cluster,perl=T,value=T)))
+c7 <- unique(as.character(grep("^END",nm.class$Cluster,perl=T,value=T)))
+
+interested.cluster <- c(c1,c2,c3,c4,c5,c6,c7)
+nm.cells <- as.character(nm.class[nm.class$Cluster %in% interested.cluster,]$NAME) # 8407 nuclei
+
+str(nm)
+nm2 <- as.matrix(nm[,-1])
+rownames(nm2) <- nm$GENE
+
+## transfer to the normalized nUMI exp-1
+nm3 <- exp(nm2)-1
+colSums(nm3[,1:100])
+
+# take out the martix of interested cells
+nm3 <- nm3[,nm.cells]
+dim(nm3)
+colSums(nm3)
+
+# reshape the matrix and add the cluster type
+library(reshape2)
+nm4 <- melt(nm3,id=row.names)
+names(nm4) <- c("Gene","NAME","value")
+nm5 <- nm4 %>% inner_join(nm.class,by="NAME") %>% mutate(Cluster=droplevels(Cluster))
+table(nm5$Cluster)
+nm5$Cluster2 <- plyr::mapvalues(nm5$Cluster,c("exPFC1","exPFC2","exPFC3","exPFC4","exPFC5","exPFC6","exPFC7","exPFC8","exPFC9","GABA1","GABA2","ASC1","ASC2","MG","ODC","OPC","END"),c("exPFC","exPFC","exPFC","exPFC","exPFC","exPFC","exPFC","exPFC","exPFC","GABA","GABA","ASC","ASC","MG","ODC","OPC","END"))
+nm6 <- nm5 %>% group_by(Gene,Cluster2) %>% dplyr::summarise(exp=mean(value))
+nm7 <- as.data.frame(nm6)
+nm8 <- dcast(nm7, Gene ~ Cluster2, value.var="exp")
+nm9 <- nm8[,-1]
+rownames(nm9) <- nm8$Gene
+
+```
 
 
 
